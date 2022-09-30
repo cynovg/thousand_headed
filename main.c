@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <curses.h>
 
 int check_movement(int newx, int newy);
