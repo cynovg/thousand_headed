@@ -1,10 +1,13 @@
 #include <curses.h>
 #include <stdlib.h>
 
+#define MAXLINES 100
+#define MAXCOLS 300
+
 int check_movement(int newx, int newy);
 void generate_maze(int maxlines, int cols);
 void show_maze(int maxlines, int cols);
-static int maze[300][300];
+static int maze[MAXLINES][MAXCOLS   ];
 
 int main() {
     int ch, oldx, oldy;
@@ -76,8 +79,8 @@ int check_movement(int newx, int newy) {
 }
 
 void generate_maze(int maxlines, int maxcols) {
-    for (int x = 1; x < maxlines - 3; x += 3) {
-        for (int y = 1; y < maxcols - 2; y += 2)
+    for (int x = 1; x < maxlines; x += 3) {
+        for (int y = 1; y < maxcols; y += 2)
             maze[x][y] = rand() % 2 ? 1 : 0;
     }
 }
