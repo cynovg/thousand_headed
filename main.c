@@ -1,6 +1,10 @@
 #include <curses.h>
+#include <stdlib.h>
 
 int check_movement(int newx, int newy);
+void generate_maze(int maxlines, int cols);
+void show_maze(int maxlines, int cols);
+static int maze[300][300];
 
 int main() {
     int ch, oldx, oldy;
@@ -11,6 +15,8 @@ int main() {
     cbreak(); // disable buffering
     keypad(stdscr, TRUE);
     noecho();
+    generate_maze(LINES, COLS);
+    show_maze(LINES, COLS);
     refresh();
     while ((ch = getch()) != KEY_F(1)) {
         switch (ch) {
@@ -43,6 +49,7 @@ int main() {
                 }
                 break;
         }
+        show_maze(LINES, COLS);
         move(0, COLS-15);
         printw("OLD [%02d] [%03d]", oldx, oldy);
         move(1, COLS-15);
@@ -59,9 +66,28 @@ int main() {
 }
 
 int check_movement(int newx, int newy) {
+    if (maze[newx][newy] == 1)
+        return 0;
     if (newx < 0 || newx > LINES - 1)
         return 0;
     if (newy < 0 || newy > COLS - 1)
         return 0;
     return 1;
+}
+
+void generate_maze(int maxlines, int maxcols) {
+    for (int x = 1; x < maxlines - 3; x += 3) {
+        for (int y = 1; y < maxcols - 2; y += 2)
+            maze[x][y] = rand() % 2 ? 1 : 0;
+    }
+}
+
+void show_maze(int maxlines, int maxcols) {
+    for (int x = 0; x < maxlines; x++) {
+        for (int y = 0; y < maxcols; y++ )
+            if (maze[x][y] == 1) {
+                move(x, y);
+                printw("X");
+            }
+    }
 }
